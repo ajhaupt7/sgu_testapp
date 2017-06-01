@@ -14,11 +14,12 @@ import { IonicPage, NavController, NavParams } from 'ionic-angular';
 })
 export class CustomPage {
 
-  constructor(public navCtrl: NavController, public navParams: NavParams) {
-  }
+  title: string;
+  content: string;
 
-  ionViewDidLoad() {
-    console.log('ionViewDidLoad CustomPage');
+  constructor(public navCtrl: NavController, public navParams: NavParams) {
+    this.title = this.navParams.get('title');
+    this.content = this.navParams.get('content');
   }
 
 }

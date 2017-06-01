@@ -15,16 +15,17 @@ export class MyApp {
   @ViewChild(Nav) nav: Nav;
 
   rootPage: any = HomePage;
-  partner: number;
+  partnerId: number;
   apiRoot: string;
 
   pages: Array<{title: string, content: string, component: any}>;
 
   constructor(public platform: Platform, public statusBar: StatusBar, public splashScreen: SplashScreen) {
+    this.partnerId = 1;
+    this.apiRoot = 'http://localhost:3000';  
+
     this.fetchPageHierarchy();
     this.initializeApp();
-    this.partner = 1;
-    this.apiRoot = 'http://localhost:3000';  
 
     this.pages = [
       { title: 'Home', content: '', component: HomePage },
@@ -34,7 +35,7 @@ export class MyApp {
 
   fetchPageHierarchy() {
     const app = this;
-    axios.get(`/partners/1/pages.json`)
+    axios.get(`${this.apiRoot}/partners/${this.partnerId}/pages.json`)
       .then((response) => {
         response.data.map(page => { 
           app.pages.push({title: page.title, content:page.content, component: CustomPage})
@@ -55,8 +56,6 @@ export class MyApp {
   }
 
   openPage(page) {
-    // Reset the content nav to have just this page
-    // we wouldn't want the back button to show in this scenario
-    this.nav.setRoot(page.component);
+    this.nav.setRoot(page.component, { title: page.title, content: page.content });
   }
 }
