@@ -4,7 +4,9 @@ import { StatusBar } from '@ionic-native/status-bar';
 import { SplashScreen } from '@ionic-native/splash-screen';
 
 import { HomePage } from '../pages/home/home';
-import { ListPage } from '../pages/list/list';
+import { CustomPage } from '../pages/custom/custom';
+
+import axios from 'axios';
 
 @Component({
   templateUrl: 'app.html'
@@ -13,18 +15,34 @@ export class MyApp {
   @ViewChild(Nav) nav: Nav;
 
   rootPage: any = HomePage;
+  partner: number;
+  apiRoot: string;
 
-  pages: Array<{title: string, component: any}>;
+  pages: Array<{title: string, content: string, component: any}>;
 
   constructor(public platform: Platform, public statusBar: StatusBar, public splashScreen: SplashScreen) {
+    this.fetchPageHierarchy();
     this.initializeApp();
+    this.partner = 1;
+    this.apiRoot = 'http://localhost:3000';  
 
-    // used for an example of ngFor and navigation
     this.pages = [
-      { title: 'Home', component: HomePage },
-      { title: 'List', component: ListPage }
+      { title: 'Home', content: '', component: HomePage },
     ];
 
+  }
+
+  fetchPageHierarchy() {
+    const app = this;
+    axios.get(`/partners/1/pages.json`)
+      .then((response) => {
+        response.data.map(page => { 
+          app.pages.push({title: page.title, content:page.content, component: CustomPage})
+        })
+      })
+      .catch((error) => {
+        console.log(error);
+      });
   }
 
   initializeApp() {
