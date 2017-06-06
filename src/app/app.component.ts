@@ -8,6 +8,8 @@ import { CustomPage } from '../pages/custom/custom';
 
 import axios from 'axios';
 
+import PartnerConfig from '../../config/partner_config';
+
 @Component({
   templateUrl: 'app.html'
 })
@@ -21,14 +23,14 @@ export class MyApp {
   pages: Array<{title: string, content: string, component: any}>;
 
   constructor(public platform: Platform, public statusBar: StatusBar, public splashScreen: SplashScreen) {
-    this.partnerId = 1;
+    this.partnerId = PartnerConfig.PARTNER_ID;
     this.apiRoot = 'http://localhost:3000';  
 
     this.fetchPageHierarchy();
     this.initializeApp();
 
     this.pages = [
-      { title: 'Home', content: '', component: HomePage },
+      { title: 'Home', content: `${this.partnerId}`, component: HomePage },
     ];
 
   }
