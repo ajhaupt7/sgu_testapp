@@ -1,0 +1,86 @@
+#!/bin/bash
+
+function usage {
+  echo "Help: 
+  usage: ./partner_build.sh -P 2 -N 'Partner Name' -ai
+  '-P | --partner_id'
+    Partner ID for app to build [required, takes one argument]
+  '-N | --name'
+    Name of app to build [required, takes one argument]
+  '-a | --android'
+    Build for android
+  '-i | --ios'
+    Build for ios 
+  '-p | --prod'
+    Build for production   
+  '-h | --help'
+    Display help"
+}
+
+while [ "$1" != "" ]; do
+  case $1 in
+    -P | --partner_id )           shift
+                                  partner_id=$1
+                                  ;;
+    -N | --name )                 shift
+                                  partner_name=$1
+                                  ;;
+    -a | -ia | -ai | --android )  android=1
+                                  ;;
+    -i | -ia | -ai | --ios )      ios=1
+                                  ;;
+    -p | --prod )                 prod=1
+                                  ;;
+    -h | --help )                 usage
+                                  exit
+                                  ;;
+  esac
+  shift
+done
+
+if [ -z "$partner_id" ]
+then
+  echo "Error: Partner ID is required to run the build script"
+  usage
+  exit 1
+fi
+
+if ! [ "$partner_id" -eq "$partner_id" ] 2>/dev/null
+then
+  echo "Error: Partner ID must be a number"
+  usage
+  exit 1
+fi
+
+echo "Creating config for partner $partner_id"
+
+cat >./config/partner_config.ts <<EOF
+export default { 
+  PARTNER_ID : ${partner_id},
+  PARTNER_NAME : ${partner_name}
+}
+EOF
+
+echo $partner_id
+echo $partner_name
+echo $android
+echo $ios
+exit
+
+if [ $android = true ]
+then
+  echo "Building for android"
+  ionic cordova platform add android
+  ionic cordova build android
+  echo "Finished building for android." 
+fi
+
+if [ $ios = true ]
+then
+  echo "Building for ios"
+  ionic cordova platform add ios
+  ionic cordova build ios
+  echo "Finished building for ios."
+fi
+
+echo "Done"

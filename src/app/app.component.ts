@@ -7,7 +7,6 @@ import { HomePage } from '../pages/home/home';
 import { CustomPage } from '../pages/custom/custom';
 
 import axios from 'axios';
-
 import PartnerConfig from '../../config/partner_config';
 
 @Component({
@@ -17,27 +16,26 @@ export class MyApp {
   @ViewChild(Nav) nav: Nav;
 
   rootPage: any = HomePage;
-  partnerId: number;
   apiRoot: string;
+  test:any;
 
   pages: Array<{title: string, content: string, component: any}>;
 
   constructor(public platform: Platform, public statusBar: StatusBar, public splashScreen: SplashScreen) {
-    this.partnerId = PartnerConfig.PARTNER_ID;
     this.apiRoot = 'http://localhost:3000';  
-
+debugger;
     this.fetchPageHierarchy();
     this.initializeApp();
 
     this.pages = [
-      { title: 'Home', content: `${this.partnerId}`, component: HomePage },
+      { title: 'Home', content: `${PartnerConfig.id}`, component: HomePage },
     ];
 
   }
 
   fetchPageHierarchy() {
     const app = this;
-    axios.get(`${this.apiRoot}/partners/${this.partnerId}/pages.json`)
+    axios.get(`${this.apiRoot}/partners/${PartnerConfig.id}/app_json.json`)
       .then((response) => {
         response.data.map(page => { 
           app.pages.push({title: page.title, content:page.content, component: CustomPage})
