@@ -62,7 +62,7 @@ fi
 echo "Creating config for partner $partner_id: $partner_name"
 
 prefix="export default "
-json=$(curl "$API_ROOT/partners/1/app_json.json")
+json=$(curl "$API_ROOT/partners/1/app_settings.json")
 new_config=$prefix$json
 echo $new_config > $CONFIG_FILEPATH
 
@@ -95,7 +95,7 @@ then
   echo "Finished building for ios. Output: $output_path. To run emulator: ionic cordova run ios (from root directory)." 
 fi
 
-# cat ./partner_config_copy.ts > $CONFIG_FILEPATH
+cat ./partner_config_copy.ts > $CONFIG_FILEPATH
 rm ./partner_config_copy.ts
 
 echo "Build process complete."

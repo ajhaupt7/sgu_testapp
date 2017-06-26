@@ -10,7 +10,7 @@ export class HomePage {
   partnerId: number;
 
   constructor(public navCtrl: NavController, public navParams: NavParams) {
-    this.partnerId = PartnerConfig.PARTNER_ID;
+    this.partnerId = PartnerConfig.id;
   }
 
 }
